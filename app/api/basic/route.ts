@@ -1,7 +1,7 @@
 import { settlePayment, facilitator } from "thirdweb/x402";
 import { createThirdwebClient } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
-import { USDC_FUJI_ADDRESS, PAYMENT_AMOUNTS, API_ENDPOINTS } from "@/lib/constants";
+import { USDC_FUJI_ADDRESS, PAYMENT_AMOUNTS, API_ENDPOINTS } from "../../../lib/constant";
 
 const client = createThirdwebClient({
   secretKey: process.env.THIRDWEB_SECRET_KEY!,
