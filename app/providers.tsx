@@ -7,12 +7,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  avalanche,
+  avalancheFuji,
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -23,7 +18,7 @@ import { ReactNode } from 'react';
 const config = getDefaultConfig({
   appName: 'X402 AI Agent Marketplace',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-  chains: [avalanche, mainnet, polygon, optimism, arbitrum, base],
+  chains: [avalancheFuji],
   ssr: true,
 });
 

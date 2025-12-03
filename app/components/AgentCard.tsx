@@ -53,7 +53,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
       </div>
       {/* CTA Button - White bg, white border, orange text */}
       <button className="w-full py-2 rounded-lg font-semibold text-white border border-transparent bg-[#CC4420] transition duration-300 hover:bg-white hover:text-black hover:border-transparent">
-        Integrate Agent
+       Pay & Access
       </button>
     </div>
   );

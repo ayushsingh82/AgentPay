@@ -18,7 +18,7 @@ const HeroLanding: React.FC = () => {
           </span>
         </div>
         
-        <h1 className="text-6xl md:text-8xl font-extrabold mb-6 leading-tight text-white">
+        <h1 className="text-6xl md:text-8xl font-serif font-extrabold mb-6 leading-tight text-white">
           Autonomous <span className="bg-[#CC4420] px-2">Agents</span>.
           <br /> 
           Instant <span className="bg-[#CC4420] px-2">Payments</span>.
