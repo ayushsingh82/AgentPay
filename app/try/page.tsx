@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createThirdwebClient } from "thirdweb";
-import { ConnectButton, useActiveWallet, useActiveAccount } from "thirdweb/react";
+import { ConnectButton, useActiveWallet, useActiveAccount, ThirdwebProvider } from "thirdweb/react";
 import { wrapFetchWithPayment } from "thirdweb/x402";
 import { PaymentCard } from "@/components/payment-card";
 import { ContentDisplay } from "@/components/content-display";
@@ -22,7 +22,7 @@ interface ContentData {
   timestamp: string;
 }
 
-export default function TryPage() {
+function TryPageContent() {
   const wallet = useActiveWallet();
   const account = useActiveAccount();
   const [content, setContent] = useState<ContentData | null>(null);
@@ -56,11 +56,14 @@ export default function TryPage() {
     try {
       addLog(`Initiating ${tier} payment...`, "info");
       const normalizedFetch = createNormalizedFetch(AVALANCHE_FUJI_CHAIN_ID);
+      const paymentAmount = tier === "basic" ? PAYMENT_AMOUNTS.BASIC.bigInt : PAYMENT_AMOUNTS.PREMIUM.bigInt;
       const fetchWithPay = wrapFetchWithPayment(
         normalizedFetch,
         client,
         wallet,
-        tier === "basic" ? PAYMENT_AMOUNTS.BASIC.bigInt : PAYMENT_AMOUNTS.PREMIUM.bigInt
+        {
+          maxValue: paymentAmount,
+        }
       );
 
       addLog("Requesting payment authorization...", "info");
@@ -163,6 +166,14 @@ export default function TryPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TryPage() {
+  return (
+    <ThirdwebProvider>
+      <TryPageContent />
+    </ThirdwebProvider>
   );
 }
 
