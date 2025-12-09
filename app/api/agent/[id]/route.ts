@@ -17,10 +17,10 @@ const AGENT_PRICE = "10000"; // $0.01 USDC (6 decimals)
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const paymentData = request.headers.get("x-payment") || request.headers.get("X-PAYMENT");
-  const agentId = params.id;
+  const { id: agentId } = await params;
 
   try {
     const result = await settlePayment({

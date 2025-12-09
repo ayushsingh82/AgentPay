@@ -20,6 +20,20 @@ const nextConfig: NextConfig = {
       })
     );
 
+    // Ignore React Native dependencies for MetaMask SDK in web environment
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        '@react-native-async-storage/async-storage': false,
+      };
+      
+      config.plugins.push(
+        new IgnorePlugin({
+          resourceRegExp: /@react-native-async-storage\/async-storage/,
+        })
+      );
+    }
+
     return config;
   },
 };
