@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AgentPay
+
+A decentralized marketplace for AI-powered autonomous agents, built on Avalanche with X402 micropayments and ERC-8004 reputation system.
+
+## Overview
+
+This project is a Next.js-based dApp that provides a marketplace where users can discover, access, and interact with various AI agents. The platform leverages:
+
+- **X402 Protocol**: HTTP 402 Payment Required standard for instant micropayments
+- **ERC-8004**: On-chain reputation and identity verification system
+- **Avalanche Network**: Fast, low-cost transactions on Avalanche Fuji testnet
+
+## Features
+
+- 🤖 **Agent Marketplace**: Browse and filter AI agents by category, price, and reputation
+- 💰 **X402 Micropayments**: Pay-per-use model with instant payment processing
+- ⭐ **ERC-8004 Reputation**: On-chain reputation scores for agents and users
+- 🔍 **Smart Filtering**: Search and filter agents by multiple criteria
+- 💬 **Agent Chat Interface**: Interactive chatbot interface for each agent
+- 🔒 **Secure Payments**: Integrated payment flow with wallet connectivity
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Blockchain**: Avalanche Fuji Testnet
+- **Payment Protocol**: X402 (Thirdweb)
+- **Reputation**: ERC-8004
+- **Wallet**: Thirdweb Connect
+- **Styling**: Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+- Avalanche Fuji testnet wallet
+- Thirdweb account (for client ID)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd my-app
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Set up environment variables:
+Create a `.env.local` file with:
+```env
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_client_id
+THIRDWEB_SECRET_KEY=your_secret_key
+THIRDWEB_SERVER_WALLET_ADDRESS=your_server_wallet
+MERCHANT_WALLET_ADDRESS=your_merchant_wallet
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+my-app/
+├── app/
+│   ├── api/              # API routes for X402 payments
+│   │   ├── basic/        # Basic tier payment endpoint
+│   │   └── premium/      # Premium tier payment endpoint
+│   ├── components/      # React components
+│   │   ├── AgentCard.tsx
+│   │   ├── Landing.tsx
+│   │   └── Navbar.tsx
+│   ├── marketplace/     # Marketplace page
+│   └── page.tsx         # Landing page
+├── components/          # Shared components
+├── lib/                 # Utilities and constants
+│   ├── constants.ts    # Payment amounts and endpoints
+│   └── payment.ts       # Payment utilities
+└── contract/           # Smart contracts
+    └── Reputation.sol   # ERC-8004 reputation contract
+```
+
+## Key Features
+
+### Agent Marketplace
+- Browse available AI agents
+- Filter by category, price range, and reputation
+- Search functionality
+- Agent detail pages with chat interface
+
+### X402 Micropayments
+- Pay-per-use model
+- Instant payment processing
+- USDC payments on Avalanche Fuji
+- Payment verification and settlement
+
+### ERC-8004 Reputation
+- On-chain reputation scores
+- Agent reputation tracking
+- Trust and verification system
+
+## Available Agents
+
+- **DeFi Arbitrage Bot**: Cross-exchange arbitrage opportunities
+- **Content Generator AI**: Automated content creation
+- **Identity Validator Agent**: On-chain identity verification
+- **Supply Chain Tracker**: Supply chain data logging
+- **Smart Contract Auditor Agent**: Security analysis and vulnerability detection
+
+## Development
+
+### Adding New Agents
+
+Agents are defined in `app/marketplace/page.tsx` in the `mockAgents` array. Each agent requires:
+- `id`: Unique identifier
+- `name`: Agent name
+- `description`: Agent description
+- `category`: Category (Finance, Content, Utility, Logistics, Security)
+- `reputation`: ERC-8004 reputation score (0-5)
+- `priceAvax`: Price in USDC per call
+- `calls`: Total number of calls
+
+### Payment Integration
+
+Payment endpoints are in `app/api/basic/route.ts` and `app/api/premium/route.ts`. They use Thirdweb's X402 implementation for payment settlement.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Thirdweb Documentation](https://portal.thirdweb.com/)
+- [X402 Protocol](https://github.com/thirdweb-dev/x402)
+- [ERC-8004 Standard](https://eips.ethereum.org/EIPS/eip-8004)
+- [Avalanche Documentation](https://docs.avax.network/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
