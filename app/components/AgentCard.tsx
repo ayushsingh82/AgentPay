@@ -40,7 +40,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
         <div className="flex items-center space-x-2">
           <Zap className="w-5 h-5 text-white" />
           <div>
-            <p className="text-lg font-semibold text-white">{agent.priceAvax} AVAX/call</p>
+            <p className="text-lg font-semibold text-white">{agent.priceAvax} USDC/call</p>
           </div>
         </div>
         <div className="flex items-center space-x-1">

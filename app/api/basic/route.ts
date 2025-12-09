@@ -13,33 +13,51 @@ const thirdwebFacilitator = facilitator({
 });
 
 export async function GET(request: Request) {
-  const paymentData = request.headers.get("x-payment");
+  const paymentData = request.headers.get("x-payment") || request.headers.get("X-PAYMENT");
 
-  const result = await settlePayment({
-    resourceUrl: API_ENDPOINTS.BASIC,
-    method: "GET",
-    paymentData,
-    payTo: process.env.MERCHANT_WALLET_ADDRESS!,
-    network: avalancheFuji,
-    price: {
-      amount: PAYMENT_AMOUNTS.BASIC.amount,
-      asset: {
-        address: USDC_FUJI_ADDRESS,
+  try {
+    const result = await settlePayment({
+      resourceUrl: API_ENDPOINTS.BASIC,
+      method: "GET",
+      paymentData,
+      payTo: process.env.MERCHANT_WALLET_ADDRESS!,
+      network: avalancheFuji,
+      price: {
+        amount: PAYMENT_AMOUNTS.BASIC.amount,
+        asset: {
+          address: USDC_FUJI_ADDRESS,
+        },
       },
-    },
-    facilitator: thirdwebFacilitator,
-  });
+      facilitator: thirdwebFacilitator,
+    });
 
-  if (result.status === 200) {
-    return Response.json({
-      tier: "basic",
-      data: "Welcome to Basic tier! You now have access to standard features.",
-      timestamp: new Date().toISOString(),
-    });
-  } else {
-    return Response.json(result.responseBody, {
-      status: result.status,
-      headers: result.responseHeaders,
-    });
+    if (result.status === 200) {
+      return Response.json({
+        tier: "basic",
+        data: "Welcome to Basic tier! You now have access to standard features.",
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      // Return the response from settlePayment (could be 402 Payment Required or other status)
+      return Response.json(
+        result.responseBody || { 
+          error: "Payment required",
+          message: "Payment is required to access this resource",
+        },
+        {
+          status: result.status,
+          headers: result.responseHeaders,
+        }
+      );
+    }
+  } catch (error) {
+    console.error("Payment settlement error:", error);
+    return Response.json(
+      {
+        error: "Payment processing failed",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

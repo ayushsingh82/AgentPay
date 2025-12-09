@@ -11,8 +11,16 @@ import { Separator } from "@/components/ui/separator";
 import { createNormalizedFetch } from "@/lib/payment";
 import { AVALANCHE_FUJI_CHAIN_ID, PAYMENT_AMOUNTS, API_ENDPOINTS } from "@/lib/constants";
 
+// Get client ID from environment
+const clientId = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID;
+
+if (!clientId) {
+  console.error("❌ NEXT_PUBLIC_THIRDWEB_CLIENT_ID is not set in environment variables");
+  console.error("Please add NEXT_PUBLIC_THIRDWEB_CLIENT_ID to your .env.local file");
+}
+
 const client = createThirdwebClient({
-  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
+  clientId: clientId || "",
 });
 
 interface ContentData {
@@ -46,7 +54,7 @@ function TryPageContent() {
     );
   };
 
-  const handlePayment = async (tier: "basic" | "premium") => {
+  const handlePayment = async () => {
     if (!wallet) return;
 
     setIsPaying(true);
@@ -54,9 +62,9 @@ function TryPageContent() {
     setLogs([]);
 
     try {
-      addLog(`Initiating ${tier} payment...`, "info");
+      addLog(`Initiating basic payment...`, "info");
       const normalizedFetch = createNormalizedFetch(AVALANCHE_FUJI_CHAIN_ID);
-      const paymentAmount = tier === "basic" ? PAYMENT_AMOUNTS.BASIC.bigInt : PAYMENT_AMOUNTS.PREMIUM.bigInt;
+      const paymentAmount = PAYMENT_AMOUNTS.BASIC.bigInt;
       const fetchWithPay = wrapFetchWithPayment(
         normalizedFetch,
         client,
@@ -67,8 +75,14 @@ function TryPageContent() {
       );
 
       addLog("Requesting payment authorization...", "info");
-      const response = await fetchWithPay(tier === "basic" ? API_ENDPOINTS.BASIC : API_ENDPOINTS.PREMIUM);
-      const responseData = await response.json();
+      const response = await fetchWithPay(API_ENDPOINTS.BASIC);
+      
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (e) {
+        responseData = { error: `Failed to parse response: ${response.status} ${response.statusText}` };
+      }
 
       if (response.status === 200) {
         updateLogStatus("Initiating", "success");
@@ -79,8 +93,13 @@ function TryPageContent() {
       } else {
         updateLogStatus("Initiating", "error");
         updateLogStatus("Requesting payment authorization", "error");
-        const errorMsg = responseData.error || "Unknown error";
+        const errorMsg = responseData?.error || responseData?.message || `HTTP ${response.status}: ${response.statusText}`;
         addLog(`Payment failed: ${errorMsg}`, "error");
+        console.error("Payment error details:", {
+          status: response.status,
+          statusText: response.statusText,
+          responseData,
+        });
       }
     } catch (error) {
       updateLogStatus("Initiating", "error");
@@ -130,20 +149,12 @@ function TryPageContent() {
 
         <Separator />
 
-        <div className="flex flex-wrap justify-between gap-6 max-w-4xl mx-auto">
+        <div className="flex justify-center max-w-4xl mx-auto">
           <PaymentCard
             tier="Basic"
             price="$0.01"
             description="Perfect for trying out the payment system"
-            onPayClick={() => handlePayment("basic")}
-            isPaying={isPaying}
-          />
-
-          <PaymentCard
-            tier="Premium"
-            price="$0.15"
-            description="Full access to all advanced features"
-            onPayClick={() => handlePayment("premium")}
+            onPayClick={handlePayment}
             isPaying={isPaying}
           />
         </div>
