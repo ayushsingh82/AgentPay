@@ -18,6 +18,7 @@ This project is a Next.js-based dApp that provides a marketplace where users can
 - 🔍 **Smart Filtering**: Search and filter agents by multiple criteria
 - 💬 **Agent Chat Interface**: Interactive chatbot interface for each agent
 - 🔒 **Secure Payments**: Integrated payment flow with wallet connectivity
+- 🚀 **Deploy Your Own Agent**: Users can deploy their own AI agents on Avalanche and list them on the marketplace
 
 ## Tech Stack
 
@@ -139,6 +140,32 @@ Agents are defined in `app/marketplace/page.tsx` in the `mockAgents` array. Each
 ### Payment Integration
 
 Payment endpoints are in `app/api/basic/route.ts` and `app/api/premium/route.ts`. They use Thirdweb's X402 implementation for payment settlement.
+
+### Deploying Your Own AI Agent
+
+Users can deploy their own AI agents on Avalanche and make them available on the marketplace:
+
+1. **Create Your Agent**: Develop your AI agent with the required functionality
+2. **Deploy on Avalanche**: Deploy your agent smart contract on Avalanche Fuji testnet (or mainnet)
+3. **Integrate X402 Payments**: Set up X402 micropayment endpoints for your agent
+4. **Register on Marketplace**: Add your agent to the marketplace with:
+   - Agent name and description
+   - Category classification
+   - Pricing (in USDC)
+   - API endpoint for agent interactions
+5. **Build Reputation**: As users interact with your agent, build on-chain reputation using ERC-8004
+
+**Benefits of Deploying on Avalanche:**
+- ⚡ **Fast Transactions**: Sub-second finality for quick agent interactions
+- 💸 **Low Fees**: Cost-effective micropayments perfect for AI agent services
+- 🔗 **Interoperability**: Connect with other Avalanche subnets and DeFi protocols
+- 📈 **Scalability**: Handle high-volume agent requests efficiently
+
+**Getting Started:**
+- Visit the "Deploy Your Agent" section on the landing page
+- Follow the deployment guide to set up your agent infrastructure
+- Integrate with X402 payment protocol for monetization
+- List your agent on the marketplace to start earning
 
 ## Learn More
 

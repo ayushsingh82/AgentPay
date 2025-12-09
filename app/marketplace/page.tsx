@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import AgentCard from '@/app/components/AgentCard';
 import { SlidersHorizontal, Search, X } from 'lucide-react';
 
@@ -29,7 +29,6 @@ const categories = ["All", "Finance", "Content", "Utility", "Logistics", "Securi
 const MarketplacePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1);
   const [minReputation, setMinReputation] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
@@ -40,6 +39,14 @@ const MarketplacePage: React.FC = () => {
     return ['All', ...Array.from(cats)];
   }, []);
 
+  // Calculate max price from agents
+  const maxAgentPrice = useMemo(() => Math.max(...mockAgents.map(a => a.priceAvax)), []);
+
+  // Initialize maxPrice to maxAgentPrice on mount
+  useEffect(() => {
+    setMaxPrice(maxAgentPrice);
+  }, [maxAgentPrice]);
+
   // Filter agents based on search and filters
   const filteredAgents = useMemo(() => {
     return mockAgents.filter(agent => {
@@ -48,21 +55,17 @@ const MarketplacePage: React.FC = () => {
       
       const matchesCategory = selectedCategory === 'All' || agent.category === selectedCategory;
       
-      const matchesPrice = agent.priceAvax >= minPrice && agent.priceAvax <= maxPrice;
+      const matchesPrice = agent.priceAvax <= maxPrice;
       
       const matchesReputation = agent.reputation >= minReputation;
       
       return matchesSearch && matchesCategory && matchesPrice && matchesReputation;
     });
-  }, [searchQuery, selectedCategory, minPrice, maxPrice, minReputation]);
-
-  // Calculate max price from agents
-  const maxAgentPrice = Math.max(...mockAgents.map(a => a.priceAvax));
+  }, [searchQuery, selectedCategory, maxPrice, minReputation]);
 
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('All');
-    setMinPrice(0);
     setMaxPrice(maxAgentPrice);
     setMinReputation(0);
   };
@@ -125,31 +128,23 @@ const MarketplacePage: React.FC = () => {
                 </select>
               </div>
 
-              {/* Price Range Filter */}
+              {/* Max Price Filter */}
               <div>
                 <label className="block text-sm font-semibold text-white mb-2">
-                  Price Range (USDC): {minPrice.toFixed(2)} - {maxPrice.toFixed(2)}
+                  Max Price (USDC): {maxPrice.toFixed(2)}
                 </label>
-                <div className="space-y-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxAgentPrice}
-                    step="0.01"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(parseFloat(e.target.value))}
-                    className="w-full"
-                  />
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxAgentPrice}
-                    step="0.01"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(parseFloat(e.target.value))}
-                    className="w-full"
-                  />
-                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max={maxAgentPrice}
+                  step="0.01"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-[#0A0A0A] rounded-lg appearance-none cursor-pointer slider-thumb slider-track"
+                  style={{
+                    background: `linear-gradient(to right, #CC4420 0%, #CC4420 ${(maxPrice / maxAgentPrice) * 100}%, #0A0A0A ${(maxPrice / maxAgentPrice) * 100}%, #0A0A0A 100%)`
+                  }}
+                />
               </div>
 
               {/* Reputation Filter */}
@@ -164,7 +159,10 @@ const MarketplacePage: React.FC = () => {
                   step="0.1"
                   value={minReputation}
                   onChange={(e) => setMinReputation(parseFloat(e.target.value))}
-                  className="w-full"
+                  className="w-full h-2 bg-[#0A0A0A] rounded-lg appearance-none cursor-pointer slider-thumb slider-track"
+                  style={{
+                    background: `linear-gradient(to right, #CC4420 0%, #CC4420 ${(minReputation / 5) * 100}%, #0A0A0A ${(minReputation / 5) * 100}%, #0A0A0A 100%)`
+                  }}
                 />
               </div>
             </div>
