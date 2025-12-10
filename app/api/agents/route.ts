@@ -1,27 +1,11 @@
 import { NextResponse } from 'next/server';
 import { registerAgentOnChain } from '@/lib/contract';
-
-// Mock database - replace with your actual database
-// This stores off-chain metadata (category, description, endpointUrl, etc.)
-let agents: any[] = [
-  {
-    id: 1,
-    name: "DeFi Arbitrage Bot",
-    category: "Finance",
-    pricePerCall: 100, // in cents (0.01 USDC)
-    description: "Monitors cross-exchange pricing on Avalanche subnets and executes X402 flash swaps for profit.",
-    createdAt: new Date().toISOString(),
-    rating: 0,
-    totalCalls: 0,
-    owner: "0x0000000000000000000000000000000000000000",
-    endpointUrl: "https://api.example.com/agent/1",
-    active: true,
-  },
-];
+import { getAllAgents, addAgent } from '@/lib/agents-db';
 
 // GET /api/agents - List all agents
 export async function GET() {
   try {
+    const agents = getAllAgents();
     return NextResponse.json(agents);
   } catch (error: any) {
     return NextResponse.json(
@@ -69,12 +53,18 @@ export async function POST(request: Request) {
     }
 
     // Create new agent with on-chain ID
+    // pricePerCall is already in cents from frontend (e.g., 0.01 USDC = 1 cent)
+    // Frontend converts: 0.01 * 100 = 1, so we receive 1 (already in cents)
+    const priceInCents = typeof pricePerCall === 'number' 
+      ? Math.round(pricePerCall) 
+      : Math.round(parseFloat(pricePerCall));
+
     const newAgent = {
       id: Number(onChainAgentId),
       name,
       owner,
       endpointUrl,
-      pricePerCall: Math.round(parseFloat(pricePerCall) * 100), // Convert to cents
+      pricePerCall: priceInCents, // Store in cents
       category,
       description: description || '',
       createdAt: new Date().toISOString(),
@@ -83,7 +73,7 @@ export async function POST(request: Request) {
       active: true,
     };
 
-    agents.push(newAgent);
+    addAgent(newAgent);
 
     return NextResponse.json(newAgent, { status: 201 });
   } catch (error: any) {

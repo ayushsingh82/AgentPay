@@ -1,23 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAgentFromContract } from '@/lib/contract';
-
-// Mock database - replace with your actual database
-// This stores off-chain metadata (category, description, endpointUrl, etc.)
-let agents: any[] = [
-  {
-    id: 1,
-    name: "DeFi Arbitrage Bot",
-    category: "Finance",
-    pricePerCall: 100, // in cents (0.01 USDC)
-    description: "Monitors cross-exchange pricing on Avalanche subnets and executes X402 flash swaps for profit.",
-    createdAt: new Date().toISOString(),
-    rating: 0,
-    totalCalls: 0,
-    owner: "0x0000000000000000000000000000000000000000",
-    endpointUrl: "https://api.example.com/agent/1",
-    active: true,
-  },
-];
+import { getAgentById } from '@/lib/agents-db';
 
 // GET /api/agents/[id] - Get agent details
 export async function GET(
@@ -29,7 +12,7 @@ export async function GET(
     const agentId = parseInt(id);
 
     // Find agent in local database (off-chain metadata)
-    const agent = agents.find(a => a.id === agentId);
+    const agent = getAgentById(agentId);
 
     if (!agent) {
       return NextResponse.json(
