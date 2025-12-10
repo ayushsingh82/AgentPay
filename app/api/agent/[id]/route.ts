@@ -3,15 +3,6 @@ import { createThirdwebClient } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
 import { USDC_FUJI_ADDRESS } from "../../../../lib/constant";
 
-const client = createThirdwebClient({
-  secretKey: process.env.THIRDWEB_SECRET_KEY!,
-});
-
-const thirdwebFacilitator = facilitator({
-  client,
-  serverWalletAddress: process.env.THIRDWEB_SERVER_WALLET_ADDRESS!,
-});
-
 // Agent price is 0.01 USDC for all agents
 const AGENT_PRICE = "10000"; // $0.01 USDC (6 decimals)
 
@@ -22,12 +13,36 @@ export async function GET(
   const paymentData = request.headers.get("x-payment") || request.headers.get("X-PAYMENT");
   const { id: agentId } = await params;
 
+  // Initialize client and facilitator at runtime, not build time
+  const secretKey = process.env.THIRDWEB_SECRET_KEY;
+  const serverWalletAddress = process.env.THIRDWEB_SERVER_WALLET_ADDRESS;
+  const merchantWalletAddress = process.env.MERCHANT_WALLET_ADDRESS;
+
+  if (!secretKey || !serverWalletAddress || !merchantWalletAddress) {
+    return Response.json(
+      {
+        error: "Server configuration error",
+        message: "Payment service is not properly configured",
+      },
+      { status: 500 }
+    );
+  }
+
+  const client = createThirdwebClient({
+    secretKey: secretKey,
+  });
+
+  const thirdwebFacilitator = facilitator({
+    client,
+    serverWalletAddress: serverWalletAddress,
+  });
+
   try {
     const result = await settlePayment({
       resourceUrl: `/api/agent/${agentId}`,
       method: "GET",
       paymentData,
-      payTo: process.env.MERCHANT_WALLET_ADDRESS!,
+      payTo: merchantWalletAddress,
       network: avalancheFuji,
       price: {
         amount: AGENT_PRICE,
@@ -69,3 +84,4 @@ export async function GET(
     );
   }
 }
+

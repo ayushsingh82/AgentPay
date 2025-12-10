@@ -21,18 +21,18 @@ const nextConfig: NextConfig = {
     );
 
     // Ignore React Native dependencies for MetaMask SDK in web environment
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        '@react-native-async-storage/async-storage': false,
-      };
-      
-      config.plugins.push(
-        new IgnorePlugin({
-          resourceRegExp: /@react-native-async-storage\/async-storage/,
-        })
-      );
-    }
+    // This needs to be applied for both client and server builds
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      '@react-native-async-storage/async-storage': false,
+    };
+    
+    // Use IgnorePlugin to completely ignore the module
+    config.plugins.push(
+      new IgnorePlugin({
+        resourceRegExp: /@react-native-async-storage\/async-storage/,
+      })
+    );
 
     return config;
   },

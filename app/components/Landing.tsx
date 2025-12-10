@@ -35,7 +35,7 @@ const HeroLanding: React.FC = () => {
               Explore Agents
             </button>
           </Link>
-          <Link href="/docs">
+          <Link href="/">
             <button className="px-8 py-3 rounded-lg font-semibold text-lg border-2 border-[#CC4420] text-white hover:bg-[#CC4420]/10 transition duration-300 ease-in-out">
               Deploy Your Agent ↗
             </button>

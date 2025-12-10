@@ -169,11 +169,11 @@ Users can deploy their own AI agents on Avalanche and make them available on the
 
 ## Learn More
 
-- [Next.js Documentation](https://nextjs.org/docs)
+- [Next.js Documentation](https://nextjs.org/)
 - [Thirdweb Documentation](https://portal.thirdweb.com/)
 - [X402 Protocol](https://github.com/thirdweb-dev/x402)
 - [ERC-8004 Standard](https://eips.ethereum.org/EIPS/eip-8004)
-- [Avalanche Documentation](https://docs.avax.network/)
+- [Avalanche Documentation](https://.avax.network/)
 
 ## License
 
