@@ -2,6 +2,7 @@ import { settlePayment, facilitator } from "thirdweb/x402";
 import { createThirdwebClient } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
 import { USDC_FUJI_ADDRESS } from "../../../../../../lib/constant";
+import { recordCallOnChain, recordPaymentOnChain } from "@/lib/contract";
 import { NextResponse } from 'next/server';
 
 // Mock database
@@ -84,10 +85,27 @@ export async function POST(
     });
 
     if (result.status === 200) {
-      // Payment successful - call the agent endpoint
+      // Payment successful - call the agent endpoint and record on-chain
       try {
-        // Update call count
+        // Update call count locally
         agent.totalCalls = (agent.totalCalls || 0) + 1;
+
+        // Record call and payment on-chain (non-blocking - don't fail if this fails)
+        if (secretKey && userAddress) {
+          try {
+            const agentIdBigInt = BigInt(parseInt(agentId));
+            const amountBigInt = BigInt(priceInSmallestUnit);
+
+            // Record the call (assume success for now - in production, determine based on agent response)
+            await recordCallOnChain(secretKey, agentIdBigInt, userAddress, true);
+
+            // Record the payment
+            await recordPaymentOnChain(secretKey, agentIdBigInt, userAddress, amountBigInt);
+          } catch (onChainError) {
+            console.error('Error recording on-chain:', onChainError);
+            // Continue even if on-chain recording fails
+          }
+        }
 
         // In a real implementation, you would call the agent's endpointUrl here
         // For now, return a mock response

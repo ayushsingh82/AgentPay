@@ -29,6 +29,15 @@ This project is a Next.js-based dApp that provides a marketplace where users can
 - **Wallet**: Thirdweb Connect
 - **Styling**: Tailwind CSS
 
+## Deployed Contracts
+
+### Reputation Contract (ERC-8004)
+
+- **Contract Address**: `0x13f92005dBaE94aE9C479e33Fe9A958Af618352e`
+- **Network**: Avalanche Fuji Testnet (Chain ID: 43113)
+- **Explorer**: [View on Routescan](https://testnet.routescan.io/address/0x13f92005dBaE94aE9C479e33Fe9A958Af618352e/contract/43113/code)
+- **Verified on Sourcify**: [View on Sourcify](https://repo.sourcify.dev/43113/0x13f92005dBaE94aE9C479e33Fe9A958Af618352e)
+
 ## Getting Started
 
 ### Prerequisites

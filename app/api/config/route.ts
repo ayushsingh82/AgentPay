@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
+import { AGENT_BAZAAR_REGISTRY_ADDRESS } from '@/lib/constant';
 
 // GET /api/config - Get contract address and configuration
 export async function GET() {
   try {
-    // Get contract address from environment variable
-    // You should set this in your .env.local file
-    const contractAddress = process.env.NEXT_PUBLIC_REPUTATION_CONTRACT_ADDRESS || '';
-
     return NextResponse.json({
-      contractAddress,
+      contractAddress: AGENT_BAZAAR_REGISTRY_ADDRESS,
       network: 'avalanche-fuji',
       chainId: 43113,
     });

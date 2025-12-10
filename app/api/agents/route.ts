@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
+import { registerAgentOnChain } from '@/lib/contract';
 
 // Mock database - replace with your actual database
+// This stores off-chain metadata (category, description, endpointUrl, etc.)
 let agents: any[] = [
   {
     id: 1,
@@ -43,9 +45,32 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create new agent
+    const secretKey = process.env.THIRDWEB_SECRET_KEY;
+    if (!secretKey) {
+      return NextResponse.json(
+        { error: 'Server configuration error: THIRDWEB_SECRET_KEY not set' },
+        { status: 500 }
+      );
+    }
+
+    // Register agent on-chain
+    let onChainAgentId: bigint;
+    try {
+      onChainAgentId = await registerAgentOnChain(secretKey, owner, name);
+    } catch (contractError: any) {
+      console.error('Contract registration error:', contractError);
+      return NextResponse.json(
+        { 
+          error: 'Failed to register agent on-chain', 
+          message: contractError.message || 'Contract interaction failed' 
+        },
+        { status: 500 }
+      );
+    }
+
+    // Create new agent with on-chain ID
     const newAgent = {
-      id: agents.length + 1,
+      id: Number(onChainAgentId),
       name,
       owner,
       endpointUrl,

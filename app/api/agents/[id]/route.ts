@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
+import { getAgentFromContract } from '@/lib/contract';
 
 // Mock database - replace with your actual database
+// This stores off-chain metadata (category, description, endpointUrl, etc.)
 let agents: any[] = [
   {
     id: 1,
@@ -26,6 +28,7 @@ export async function GET(
     const { id } = await params;
     const agentId = parseInt(id);
 
+    // Find agent in local database (off-chain metadata)
     const agent = agents.find(a => a.id === agentId);
 
     if (!agent) {
@@ -35,7 +38,20 @@ export async function GET(
       );
     }
 
-    // Return agent with on-chain data structure
+    // Fetch on-chain data from contract
+    const secretKey = process.env.THIRDWEB_SECRET_KEY;
+    let onChainData = null;
+
+    if (secretKey) {
+      try {
+        onChainData = await getAgentFromContract(secretKey, BigInt(agentId));
+      } catch (contractError) {
+        console.error('Error fetching on-chain data:', contractError);
+        // Continue with fallback data if contract call fails
+      }
+    }
+
+    // Merge off-chain and on-chain data
     const agentResponse = {
       agentId: agent.id,
       owner: agent.owner,
@@ -46,7 +62,7 @@ export async function GET(
       pricePerCall: agent.pricePerCall,
       active: agent.active,
       createdAt: agent.createdAt,
-      onChain: {
+      onChain: onChainData || {
         totalCalls: agent.totalCalls || 0,
         ratingCount: 0,
         averageRating: agent.rating || 0,
