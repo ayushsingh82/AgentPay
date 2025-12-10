@@ -29,15 +29,10 @@ const HeroLanding: React.FC = () => {
         </p>
         
         {/* --- CTAs --- */}
-        <div className="flex justify-center space-x-4">
+        <div className="flex justify-center">
           <Link href="/marketplace">
             <button className="px-8 py-3 rounded-lg font-semibold text-lg text-[#CC4420] border border-white bg-white transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#CC4420] hover:text-white hover:border-transparent">
               Explore Agents
-            </button>
-          </Link>
-          <Link href="/">
-            <button className="px-8 py-3 rounded-lg font-semibold text-lg border-2 border-[#CC4420] text-white hover:bg-[#CC4420]/10 transition duration-300 ease-in-out">
-              Deploy Your Agent ↗
             </button>
           </Link>
         </div>

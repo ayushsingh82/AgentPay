@@ -4,7 +4,6 @@ import Link from 'next/link';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAccount } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -154,33 +153,6 @@ export default function Marketplace() {
         theme="dark"
       />
 
-      {/* HEADER */}
-      <div className="absolute top-6 left-6 z-10">
-        <Link href="/" className="focus:outline-none">
-          <div className="bg-[#CC4420] border-2 border-white shadow-[6px_6px_0_0_rgba(255,255,255,1)] px-6 py-3 rounded-lg cursor-pointer hover:shadow-[4px_4px_0_0_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200 flex items-center gap-3">
-            <h1 className="text-2xl font-black text-white">Agent Bazaar</h1>
-          </div>
-        </Link>
-      </div>
-
-      {/* WALLET CONNECT & SOCIAL LINKS */}
-      <div className="absolute top-6 right-6 z-50 flex gap-3 items-center">
-        <div className={`connect-button-wrapper border-2 border-white shadow-[6px_6px_0_0_rgba(255,255,255,1)] rounded-lg cursor-pointer hover:shadow-[4px_4px_0_0_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200 pointer-events-auto ${
-          isConnected ? 'bg-black' : 'bg-[#CC4420]'
-        }`}>
-          <ConnectButton showBalance={false} />
-        </div>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bg-black border-2 border-white shadow-[4px_4px_0_0_rgba(255,255,255,1)] p-3 rounded-lg hover:shadow-[2px_2px_0_0_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200">
-          <svg className="w-6 h-6" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-          </svg>
-        </a>
-        <a href="https://telegram.org" target="_blank" rel="noopener noreferrer" className="bg-black border-2 border-white shadow-[4px_4px_0_0_rgba(255,255,255,1)] p-3 rounded-lg hover:shadow-[2px_2px_0_0_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200">
-          <svg className="w-6 h-6" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-          </svg>
-        </a>
-      </div>
 
       {/* ADD AGENT BUTTON - Bottom Right */}
       <div className="fixed bottom-6 right-6 z-10">
@@ -199,12 +171,12 @@ export default function Marketplace() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="relative z-10 pt-32 pb-20 px-4 max-w-7xl mx-auto">
+      <div className="relative z-10 pt-20 pb-20 px-4 max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-black text-white mb-4">Agent Marketplace</h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Discover and interact with AI agents (MCPs) deployed on NullShot. Pay per use with x402 micropayments.
+            Discover and interact with AI agents (MCPs) deployed on Avalanche. Pay per use with x402 micropayments.
           </p>
         </div>
 
@@ -358,10 +330,7 @@ export default function Marketplace() {
               <>
                 {!isConnected && (
                   <div className="mb-6 p-4 bg-yellow-900/50 border-2 border-yellow-400 rounded-lg">
-                    <p className="text-sm text-white font-bold mb-2">Please connect your wallet to register an agent</p>
-                    <div className="connect-button-wrapper border-2 border-white shadow-[6px_6px_0_0_rgba(255,255,255,1)] rounded-lg cursor-pointer hover:shadow-[4px_4px_0_0_rgba(255,255,255,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-200 bg-[#CC4420] inline-block">
-                      <ConnectButton showBalance={false} />
-                    </div>
+                    <p className="text-sm text-white font-bold">Please connect your wallet in the navbar to register an agent</p>
                   </div>
                 )}
                 <form onSubmit={handleSubmit} className="space-y-4">
