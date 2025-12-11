@@ -6,8 +6,10 @@ import { getAllAgents, addAgent } from '@/lib/agents-db';
 export async function GET() {
   try {
     const agents = getAllAgents();
+    console.log(`[GET /api/agents] Returning ${agents.length} agents`);
     return NextResponse.json(agents);
   } catch (error: any) {
+    console.error('[GET /api/agents] Error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch agents', message: error.message },
       { status: 500 }
@@ -74,6 +76,7 @@ export async function POST(request: Request) {
     };
 
     addAgent(newAgent);
+    console.log(`[POST /api/agents] Added agent with ID ${newAgent.id}. Total agents: ${getAllAgents().length}`);
 
     return NextResponse.json(newAgent, { status: 201 });
   } catch (error: any) {

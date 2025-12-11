@@ -47,7 +47,10 @@ export default function Marketplace() {
         }
         
         const data = await response.json();
-        setAgents(data);
+        // Ensure data is an array
+        const agentsArray = Array.isArray(data) ? data : [];
+        console.log(`[Marketplace] Fetched ${agentsArray.length} agents`);
+        setAgents(agentsArray);
         setError(null);
       } catch (err: any) {
         console.error('Error fetching agents:', err);

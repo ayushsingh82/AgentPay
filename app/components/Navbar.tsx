@@ -14,7 +14,7 @@ export default function Navbar() {
             </div>
           </Link>
           <div className="flex items-center">
-            <ConnectButton />
+            <ConnectButton showBalance />
           </div>
         </div>
       </div>
