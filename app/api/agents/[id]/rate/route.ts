@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createThirdwebClient, getContract, readContract } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
-import { AGENT_BAZAAR_REGISTRY_ADDRESS, AGENT_BAZAAR_REGISTRY_ABI } from "@/lib/contract";
+import { AGENT_BAZAAR_REGISTRY_ADDRESS } from "@/lib/constants";
+import { AGENT_BAZAAR_REGISTRY_ABI } from "@/lib/contract";
 
 // POST /api/agents/[id]/rate - Rate an agent
 export async function POST(
@@ -50,7 +51,7 @@ export async function POST(
     // Check if user can rate this agent
     const canRate = await readContract({
       contract,
-      method: "function canRate(address user, uint256 agentId) view returns (bool)",
+      method: "canRate",
       params: [userAddress as `0x${string}`, BigInt(parseInt(agentId))],
     });
 
@@ -121,7 +122,7 @@ export async function GET(
 
     const canRate = await readContract({
       contract,
-      method: "function canRate(address user, uint256 agentId) view returns (bool)",
+      method: "canRate",
       params: [userAddress as `0x${string}`, BigInt(parseInt(agentId))],
     });
 

@@ -35,31 +35,47 @@ export default function Marketplace() {
     description: '',
   });
 
-  // Fetch agents from backend API
+  // Hardcoded agents for now (backend not working)
   React.useEffect(() => {
-    const fetchAgents = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/agents');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch agents');
-        }
-        
-        const data = await response.json();
-        // Ensure data is an array
-        const agentsArray = Array.isArray(data) ? data : [];
-        console.log(`[Marketplace] Fetched ${agentsArray.length} agents`);
-        setAgents(agentsArray);
-        setError(null);
-      } catch (err: any) {
-        console.error('Error fetching agents:', err);
-        setError(err.message || 'Failed to load agents');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAgents();
+    setIsLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      const hardcodedAgents: Agent[] = [
+        {
+          id: 1,
+          name: "DeFi Arbitrage Bot",
+          category: "Finance",
+          pricePerCall: 1, // 0.01 USDC in cents
+          description: "Monitors cross-exchange pricing on Avalanche subnets and executes X402 flash swaps for profit.",
+          createdAt: new Date().toISOString(),
+          rating: 0,
+          totalCalls: 0,
+        },
+        {
+          id: 2,
+          name: "Content Generator AI",
+          category: "Content",
+          pricePerCall: 1, // 0.01 USDC in cents
+          description: "Creates concise, tokenized summaries of news articles for micro-reading platforms.",
+          createdAt: new Date().toISOString(),
+          rating: 0,
+          totalCalls: 0,
+        },
+        {
+          id: 3,
+          name: "Smart Contract Auditor Agent",
+          category: "Security",
+          pricePerCall: 1, // 0.01 USDC in cents
+          description: "AI-powered smart contract security analysis. Detects vulnerabilities, gas optimization opportunities, and compliance issues.",
+          createdAt: new Date().toISOString(),
+          rating: 0,
+          totalCalls: 0,
+        },
+      ];
+      setAgents(hardcodedAgents);
+      setIsLoading(false);
+      setError(null);
+    }, 500);
   }, []);
 
   const [searchQuery, setSearchQuery] = React.useState('');

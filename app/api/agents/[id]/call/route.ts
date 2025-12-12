@@ -1,7 +1,7 @@
 import { settlePayment, facilitator } from "thirdweb/x402";
 import { createThirdwebClient } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
-import { USDC_FUJI_ADDRESS } from "../../../../../../lib/constant";
+import { USDC_FUJI_ADDRESS } from "@/lib/constants";
 import { recordCallOnChain, recordPaymentOnChain } from "@/lib/contract";
 import { NextResponse } from 'next/server';
 
